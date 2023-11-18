@@ -149,15 +149,84 @@
             background-color: white;
             scroll-snap-align: start;
         }
+
+        .search-box {
+    padding: 14px 16px;
+    background-color: white;
+    color: black;
+    position: absolute;
+    right: 0;
+    top: 50px;
+}
+
+.search-box input[type="text"] {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
     </style>
 </head>
 <body>
     
-    </script>
+    
     <script>
-        // 댓글 창 스크립트
+
+function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+
+    window.onload = function() {
+        var username = getCookie("username");
+        if (username) {
+            // 사용자 이름을 페이지에 표시하는 로직
+            document.getElementById("menu5").textContent = username;
+        }
+    };
+
         document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('.comment-form').addEventListener('submit', function(e) {
+            var searchBox = document.getElementById('search-box');
+            var searchInput = document.getElementById('search-input');
+
+            // 검색 아이콘 클릭 이벤트 리스너
+            document.getElementById('search-icon').addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleSearchBox();
+            });
+
+            // 검색 입력창에서 Enter 키 이벤트 리스너
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    var searchValue = searchInput.value.trim();
+                    if (searchValue) {
+                        // 검색값 저장 로직 (예: 콘솔에 출력)
+                        console.log("검색어:", searchValue);
+                        // 검색창 숨기기
+                        toggleSearchBox();
+                        // 입력창 초기화
+                        searchInput.value = '';
+                    }
+                }
+            });
+
+            function toggleSearchBox() {
+                if (searchBox.style.display === 'none') {
+                    searchBox.style.display = 'block';
+                    searchInput.focus();
+                } else {
+                    searchBox.style.display = 'none';
+                }
+            }
+        });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector('.comment-form').addEventListener('submit', function(e) {
                 e.preventDefault();
 
                 const commentInput = document.querySelector('.comment-form textarea');
@@ -178,26 +247,24 @@
                 }
             });
         });
-    </script>
-    <script>
-        // 로그인 창 스크립트
-        document.addEventListener('DOMContentLoaded', function() {
-            const menu5Link = document.querySelector('.navbar-menu a[href="#support"]');
-            menu5Link.addEventListener('click', function(e) {
-                e.preventDefault();
-                window.location.href = 'support.html';
-            });
-        });
+   
+ 
+    
+
+
     </script>
     <div class="navbar">
         <a href="#home" class="navbar-logo">logo</a>
         <div class="navbar-menu">
             <a href="#home">menu1</a>
-            <a href="/test">test</a>
+            <a href="#news">menu2</a>
             <a href="#contact">menu3</a>
             <a href="#about">menu4</a>
-            <a href="support.html">menu5</a>
-            <a href="#search" class="search-icon">🔍</a>
+            <a href="/login" class="user" id="menu5">menu5</a>
+            <a href="#" class="search-icon" id ="search-icon">🔍</a>
+            <div class="search-box" id="search-box" style="display: none;">
+                <input type="text" placeholder="Search..." id = "search-input">
+            </div>
         </div>
     </div>
     <div class="content">
@@ -209,14 +276,12 @@
                     <div>
                         <h1>Retrieved News Articles</h1>
                         <ul>
-                            {% for item in data %}
                             <li>
-                                <strong>출판사:</strong> {{ item[0] }}<br>
-                                <strong>제목:</strong> {{ item[1] }}<br>
-                                <strong>하이라이트:</strong> {{ item[2] }}<br>
+                                <strong>title:</strong> {{ data[0][0] }}<br>
+                                <strong>hilight:</strong> {{ data[0][1] }}<br>
+                                <strong>Provider News ID:</strong> {{ data[0][2] }}<br>
                             </li>
                             <br>
-                            {% endfor %}
                         </ul>
                     </div>
                 </div>
