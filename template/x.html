@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Your head content -->
+</head>
+<body>
+    <div>
+        <h1>Retrieved News Articles</h1>
+        <ul>
+            {% for item in data %}
+                <li>
+                    <strong>Byline:</strong> {{ item.byline }}<br>
+                    <strong>Category:</strong> {{ item.category }}<br>
+                    <strong>Provider News ID:</strong> {{ item.provider_news_id }}<br>
+                </li>
+                <br>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
