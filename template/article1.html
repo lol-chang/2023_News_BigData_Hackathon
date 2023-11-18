@@ -14,8 +14,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            padding: 0 7px;
-           
+            padding: 0 10px;
         }
         .navbar-logo {
             font-size: 24px;
@@ -30,7 +29,6 @@
             color: white;
             text-align: center;
             padding: 14px 16px;
-            padding-top: 20px;
             text-decoration: none;
         }
         .navbar-menu a:hover {
@@ -131,9 +129,9 @@
             box-sizing: border-box;
         }
         .reelsContainer {
-            /* height: 80vh;
-            width: 25vw; */
-            /* margin-top: 4em; */
+            height: 80vh;
+            width: 25vw;
+            margin-top: 4em;
             display: flex;
             overflow: auto;
             gap: 2em;
@@ -144,7 +142,7 @@
             display: none;
         }
         .reel {
-            min-height: 50vh;
+            min-height: 75vh;
             min-width: 25vw;
             background-color: white;
             scroll-snap-align: start;
@@ -152,7 +150,43 @@
     </style>
 </head>
 <body>
-    
+    <script>
+        // 뉴스 박스 스크립트
+        document.addEventListener('DOMContentLoaded', function() {
+            let loading = false; // 중복 로딩 방지 플래그
+
+            function loadNews() {
+                if (loading) return;
+                loading = true;
+
+                fetch('/api/news')
+                    .then(response => response.json())
+                    .then(articles => {
+                        const newsBox = document.querySelector('.box-content1');
+                        newsBox.innerHTML += articles.map(article => `
+                            <div class="reel">
+                                <h2>${article.title}</h2>
+                                <p>${article.description}</p>
+                                <a href="${article.url}" target="_blank">Read more</a>
+                            </div>
+                        `).join('');
+                        loading = false;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching news:', error);
+                        loading = false;
+                    });
+            }
+
+            const newsBox = document.querySelector('.box-content1');
+            newsBox.addEventListener('scroll', function() {
+                if (newsBox.scrollTop + newsBox.clientHeight >= newsBox.scrollHeight - 10) {
+                    loadNews();
+                }
+            });
+
+            loadNews();
+        });
     </script>
     <script>
         // 댓글 창 스크립트
@@ -202,16 +236,10 @@
     </div>
     <div class="content">
         <div class="left-column">
-            <div class="box box-content1 reelsContainer"> <!-- 뉴스 박스 -->
-                
-                <!-- 뉴스 항목들이 여기에 들어감 -->
-                <div class="reel">1</div>
-                <div class="reel">2</div>
-                <div class="reel">3</div>
-                <div class="reel">4</div>
-                <div class="reel">5</div>
-                <div class="reel">6</div>
-                
+            <div class="box"> <!-- 뉴스 박스 -->
+                <div class="box-content1 reelsContainer">
+                    <!-- 뉴스 항목들이 여기에 들어감 -->
+                </div>
             </div>
         </div>
         <div class="right-column">
