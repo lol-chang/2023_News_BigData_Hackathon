@@ -37,6 +37,7 @@ data = {
 respone = requests.post(url, json=data)
 if respone.status_code == 200:
     parsed_data = respone.json()
-    print(parsed_data)
+    for i in parsed_data['return_object']['documents']:
+        print(i)
 else:
     print("API 호출 실패", respone.status_code)
