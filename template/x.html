@@ -5,17 +5,13 @@
 </head>
 <body>
     <div>
-        <h1>Retrieved News Articles</h1>
-        <ul>
-            {% for item in data %}
-                <li>
-                    <strong>Byline:</strong> {{ item.byline }}<br>
-                    <strong>Category:</strong> {{ item.category }}<br>
-                    <strong>Provider News ID:</strong> {{ item.provider_news_id }}<br>
-                </li>
-                <br>
-            {% endfor %}
-        </ul>
+        <li>
+            <strong>본문:</strong> {{ data.return_object.documents[0].content }}<br>
+            <strong>기자:</strong> {{ data.return_object.documents[0].byline }}<br>
+            <strong>Title:</strong> {{ data.return_object.documents[0].title }}<br>
+            <strong>Published At:</strong> {{ data.return_object.documents[0].published_at }}<br>
+        </li>
+        <br>
     </div>
 </body>
 </html>
