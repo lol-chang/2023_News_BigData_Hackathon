@@ -210,12 +210,12 @@
                         <h1>Retrieved News Articles</h1>
                         <ul>
                             {% for item in data %}
-                                <li>
-                                    <strong>title:</strong> {{ item.title }}<br>
-                                    <strong>hilight:</strong> {{ item.hilight }}<br>
-                                    <strong>Provider News ID:</strong> {{ item.provider_news_id }}<br>
-                                </li>
-                                <br>
+                            <li>
+                                <strong>출판사:</strong> {{ item[0] }}<br>
+                                <strong>제목:</strong> {{ item[1] }}<br>
+                                <strong>하이라이트:</strong> {{ item[2] }}<br>
+                            </li>
+                            <br>
                             {% endfor %}
                         </ul>
                     </div>
