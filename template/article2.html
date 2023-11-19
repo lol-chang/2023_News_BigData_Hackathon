@@ -169,6 +169,17 @@
     
     
     <script>
+        document.addEventListener('keypress', function(event) {
+        const key = event.key;
+        if (key === ' ') {
+            const newReel = document.createElement('div');
+            newReel.classList.add('reel');
+            newReel.textContent = 'New Reel'; // 변경된 부분
+
+            const reelsContainer = document.querySelector('.reelsContainer');
+            reelsContainer.appendChild(newReel);
+        }
+    });
 
 function getCookie(name) {
         var nameEQ = name + "=";
@@ -247,10 +258,6 @@ function getCookie(name) {
                 }
             });
         });
-   
- 
-    
-
 
     </script>
     <div class="navbar">
@@ -285,11 +292,7 @@ function getCookie(name) {
                         </ul>
                     </div>
                 </div>
-                <div class="reel">2</div>
-                <div class="reel">3</div>
-                <div class="reel">4</div>
-                <div class="reel">5</div>
-                <div class="reel">6</div>
+
                 
             </div>
         </div>

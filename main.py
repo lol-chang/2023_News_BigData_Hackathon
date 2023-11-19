@@ -7,6 +7,7 @@ app = FastAPI()
 templates = Jinja2Templates(directory="template")
 
 data2 = bigkinds.search_news()
+
 data3 = bigkinds.news_id_search()
 
 @app.get("/")
