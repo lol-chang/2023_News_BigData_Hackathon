@@ -14,7 +14,8 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            padding: 0 10px;
+            padding: 0 7px;
+           
         }
         .navbar-logo {
             font-size: 24px;
@@ -29,6 +30,7 @@
             color: white;
             text-align: center;
             padding: 14px 16px;
+            padding-top: 20px;
             text-decoration: none;
         }
         .navbar-menu a:hover {
@@ -129,9 +131,9 @@
             box-sizing: border-box;
         }
         .reelsContainer {
-            height: 80vh;
-            width: 25vw;
-            margin-top: 4em;
+            /* height: 80vh;
+            width: 25vw; */
+            /* margin-top: 4em; */
             display: flex;
             overflow: auto;
             gap: 2em;
@@ -142,56 +144,143 @@
             display: none;
         }
         .reel {
-            min-height: 75vh;
+            min-height: 50vh;
             min-width: 25vw;
             background-color: white;
             scroll-snap-align: start;
         }
+
+        .search-box {
+    padding: 14px 16px;
+    background-color: white;
+    color: black;
+    position: absolute;
+    right: 0;
+    top: 50px;
+}
+
+.search-box input[type="text"] {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+
+
+/* 공통 버튼 스타일 */
+
+
+/* 버튼과 bylaw 박스를 포함할 컨테이너 */
+.bylaw-container {
+    display: flex; /* flexbox 사용 */
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: space-between; /* 좌우 여백을 균등하게 분배 */
+    
+}
+.bylaw-box {
+    
+    flex-grow: 1; /* 가용 공간을 모두 차지하도록 설정 */
+    margin-right: 10px; /* 버튼 컨테이너와의 간격 설정 */
+    padding: 10px; /* 안쪽 여백 설정 */
+    border: 1px solid black; /* 테두리 설정 */
+
+}
+.buttons {
+    align-items: center; /* 세로 중앙 정렬 */
+    display: flex;
+    flex-direction: row; /* 버튼을 세로로 쌓음 */
+    justify-content: space-between; /* 버튼 사이의 공간을 균등하게 분배 */
+    height: 100px; /* 버튼 컨테이너의 높이 설정 */
+}
+.like-button, .unlike-button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    text-align: center;
+    width: 50px; /* 버튼 너비 설정 */
+    height: 30px; /* 버튼 높이 설정 */
+}
+
+/* 좋아요 및 싫어요 버튼 이미지 스타일 */
+.like-button img, .unlike-button img {
+    width: 100%; /* 부모 요소의 크기에 맞게 조정 */
+    height: auto; /* 이미지의 원래 비율을 유지 */
+}
+
+
+/* .bylaw-box는 bylaw1과 bylaw2 클래스 대신에 사용 */
+
+
     </style>
 </head>
 <body>
+    
+    
     <script>
-        // 뉴스 박스 스크립트
+
+function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+    /*   ================= user 정보 =================    */
+    var username = getCookie("username");
+    var age = "{{ age }}";
+    var job = "{{ job }}";
+    var gender = "{{gender}}"
+    var country = "{{country}}"
+    /*   =============================================   */
+    window.onload = function() {
+        
+        if (username) {
+            // 사용자 이름을 페이지에 표시하는 로직
+            document.getElementById("menu5").textContent = username;
+            document.getElementById("menu4").textContent = "Log out";
+        }
+    };
+
         document.addEventListener('DOMContentLoaded', function() {
-            let loading = false; // 중복 로딩 방지 플래그
+            var searchBox = document.getElementById('search-box');
+            var searchInput = document.getElementById('search-input');
 
-            function loadNews() {
-                if (loading) return;
-                loading = true;
+            // 검색 아이콘 클릭 이벤트 리스너
+            document.getElementById('search-icon').addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleSearchBox();
+            });
 
-                fetch('/api/news')
-                    .then(response => response.json())
-                    .then(articles => {
-                        const newsBox = document.querySelector('.box-content1');
-                        newsBox.innerHTML += articles.map(article => `
-                            <div class="reel">
-                                <h2>${article.title}</h2>
-                                <p>${article.description}</p>
-                                <a href="${article.url}" target="_blank">Read more</a>
-                            </div>
-                        `).join('');
-                        loading = false;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching news:', error);
-                        loading = false;
-                    });
-            }
-
-            const newsBox = document.querySelector('.box-content1');
-            newsBox.addEventListener('scroll', function() {
-                if (newsBox.scrollTop + newsBox.clientHeight >= newsBox.scrollHeight - 10) {
-                    loadNews();
+            // 검색 입력창에서 Enter 키 이벤트 리스너
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    var searchValue = searchInput.value.trim();
+                    if (searchValue) {
+                        // 검색값 저장 로직 (예: 콘솔에 출력)
+                        console.log("검색어:", searchValue);
+                        // 검색창 숨기기
+                        toggleSearchBox();
+                        // 입력창 초기화
+                        searchInput.value = '';
+                    }
                 }
             });
 
-            loadNews();
+            function toggleSearchBox() {
+                if (searchBox.style.display === 'none') {
+                    searchBox.style.display = 'block';
+                    searchInput.focus();
+                } else {
+                    searchBox.style.display = 'none';
+                }
+            }
         });
-    </script>
-    <script>
-        // 댓글 창 스크립트
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('.comment-form').addEventListener('submit', function(e) {
+
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector('.comment-form').addEventListener('submit', function(e) {
                 e.preventDefault();
 
                 const commentInput = document.querySelector('.comment-form textarea');
@@ -201,7 +290,7 @@
                     const newComment = document.createElement('div');
                     newComment.classList.add('comment');
                     newComment.innerHTML = `
-                        <span class="comment-user">@username</span><br>
+                        <span class="comment-user">@${username}-${age}-${job}</span><br>
                         <span class="comment-text">${userComment}</span>
                     `;
 
@@ -212,34 +301,61 @@
                 }
             });
         });
-    </script>
-    <script>
-        // 로그인 창 스크립트
-        document.addEventListener('DOMContentLoaded', function() {
-            const menu5Link = document.querySelector('.navbar-menu a[href="#support"]');
-            menu5Link.addEventListener('click', function(e) {
-                e.preventDefault();
-                window.location.href = 'support.html';
-            });
-        });
+
+        function likeFunction() {
+    // 좋아요 버튼을 눌렀을 때 실행할 로직
+         alert('좋아요 버튼이 클릭되었습니다!');
+        }
+
+        function unlikeFunction() {
+    // 좋아요 버튼을 눌렀을 때 실행할 로직
+         alert('싫어요 버튼이 클릭되었습니다!');
+        }
+ 
+    
+
+
     </script>
     <div class="navbar">
-        <a href="#home" class="navbar-logo">logo</a>
+        <a href="/" class="navbar-logo">logo</a>
         <div class="navbar-menu">
-            <a href="#home">menu1</a>
-            <a href="#news">menu2</a>
-            <a href="#contact">menu3</a>
-            <a href="#about">menu4</a>
-            <a href="support.html">menu5</a>
-            <a href="#search" class="search-icon">🔍</a>
+            <a href="/plaza">지방의회광장</a>
+            <a href="https://www.bigkinds.or.kr/#n">BigKinds</a>
+            <a href="https://www.juminegov.go.kr/ordn/reqList">주민e직접</a>
+            <a href="#about" class="signin" id="menu4">Sign In</a>
+            <a href="/login" class="user/login" id="menu5">Log In</a>
+            <a href="#" class="search-icon" id ="search-icon">🔍</a>
+            <div class="search-box" id="search-box" style="display: none;">
+                <input type="text" placeholder="Search..." id = "search-input">
+            </div>
         </div>
     </div>
     <div class="content">
         <div class="left-column">
-            <div class="box"> <!-- 뉴스 박스 -->
-                <div class="box-content1 reelsContainer">
-                    <!-- 뉴스 항목들이 여기에 들어감 -->
+            <div class="box box-content1 reelsContainer"> <!-- 뉴스 박스 -->
+                
+                <!-- 뉴스 항목들이 여기에 들어감 -->
+                <div class="reel">
+                    <div>
+                        <h1>Retrieved News Articles</h1>
+                        <ul>
+                          
+                                <li>
+                                    <strong>title:</strong> {{ data[0][0] }}<br>
+                                    <strong>hilight:</strong> {{ data[0][1] }}<br>
+                                    <strong>Provider News ID:</strong> {{ data[0][2] }}<br>
+                                </li>
+                                <br>
+                          
+                        </ul>
+                    </div>
                 </div>
+                <div class="reel">2</div>
+                <div class="reel">3</div>
+                <div class="reel">4</div>
+                <div class="reel">5</div>
+                <div class="reel">6</div>
+                
             </div>
         </div>
         <div class="right-column">
@@ -261,7 +377,33 @@
         </div>
     </div>
     <div class="footer">
-        <div class="footer-box">Box 4</div>
+        <div class="footer-box">
+            <!-- 첫 번째 bylaw 컨테이너 -->
+            <div class="bylaw-container">
+                <div class="bylaw-box">text1 : openai에서 가져옴 조례 1</div>
+                <div class="buttons">
+                    <button class="like-button" onclick="likeFunction()">
+                        <img src="https://cdn-icons-png.flaticon.com/128/1917/1917827.png?track=ais" alt="좋아요" />
+                    </button>
+                    <button class="unlike-button" onclick="unlikeFunction()">
+                        <img src="https://cdn-icons-png.flaticon.com/128/1917/1917827.png?track=ais" alt="싫어요" />
+                    </button>
+                </div>
+            </div>
+            <!-- 두 번째 bylaw 컨테이너 -->
+            <div class="bylaw-container">
+                <div class="bylaw-box">text1 : openai에서 가져옴 조례 2</div>
+                <div class="buttons">
+                    <button class="like-button" onclick="likeFunction()">
+                        <img src="https://cdn-icons-png.flaticon.com/128/1917/1917827.png?track=ais" alt="좋아요" />
+                    </button>
+                    <button class="unlike-button" onclick="unlikeFunction()">
+                        <img src="https://cdn-icons-png.flaticon.com/128/1917/1917827.png?track=ais" alt="싫어요" />
+                    </button>
+                </div>
+             
+            </div>
+        </div>
     </div>
 </body>
 </html>
