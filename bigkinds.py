@@ -4,20 +4,19 @@ import re
 import openai
 
 
-openai.api_key = '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'
-model = "text-davinci-003"
-# model= "gpt-3.5-turbo"
+openai.api_key = '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'
+model = 'gpt-3.5-turbo-1106'
 
 def gpt(query):
-  # openai migrate 업데이트 필요함 
+    response = openai.ChatCompletion.create(
+        model=model,
+        messages=[{"role": "system", "content": query}],
+        max_tokens=550
+    )
+    answer = response['choices'][0]['message']['content'].strip()
+    return answer
 
-  response = openai.Completion.create(
-    engine=model,
-    prompt=query,
-    max_tokens=550 #글자수 제한
-  )
-  answer = response.choices[0].text.strip()
-  return answer
+
 
 def ordinance_from_gpt(x):
     user = x + "이 내용을 보고 독특한 조례를 3가지를 만들어서 리스트 형식으로 리턴해주세요."
@@ -44,25 +43,23 @@ def search_news():
                 "from": "2019-01-01",
                 "until": "2023-03-31"
             },
-            "provider": ["경향신문"],
-            "category": ["정치>정치일반", "IT_과학"],
-            "category_incident": ["범죄", "교통사고", "재해>자연재해"],
+            "provider": [],
+            "category": ["IT_과학"],
+            "category_incident": ["재해>자연재해"],
             "byline": "",
-            "provider_subject": ["경제", "부동산"],
-            "subject_info": [""],
-            "subject_info1": [""],
-            "subject_info2": [""],
-            "subject_info3": [""],
-            "subject_info4": [""],
+           # "provider_subject": ["경제", "부동산"],
             "sort": {"date": "desc"},
             "hilight": 200,
             "return_from": 0,
-            "return_size": 1,
+            "return_size": 10,
             "fields": [
                 "byline",
                 "category",
                 "category_incident",
-                "provider_news_id"
+                "provider_news_id",
+                "provider_link_page"
+                "content"
+                "images"
             ]
         }
     }
@@ -71,19 +68,28 @@ def search_news():
     res = []
     if respone.status_code == 200:
         parsed_data = respone.json()
+        for i in range(len(parsed_data['return_object']['documents'])):
+            news_id = parsed_data['return_object']['documents'][i]['news_id']
+            
+            
+            more = news_id_search([news_id])
+            link = more['return_object']['documents'][0]['provider_link_page']
+            content = more['return_object']['documents'][0]['content']
+            images = more['return_object']['documents'][0]['images']
+            byline = more['return_object']['documents'][0]['byline']
 
-        news_id = parsed_data['return_object']['documents'][0]['news_id']
-        print(news_id_search([news_id]))
-
-        title = parsed_data['return_object']['documents'][0]['title']
-        hilight = remove_html_tags(parsed_data['return_object']['documents'][0]['hilight'])
-        provider = parsed_data['return_object']['documents'][0]['provider']
-        keyword = create_keyword(parsed_data['return_object']['documents'][0]['title'], hilight)
-        related_industry = related_industries(keyword, hilight)
-
-        #AI 조례 생성
-        # created_ordinance = ordinance_from_gpt()
-        res.append([provider, title, hilight, related_industry])
+            title = parsed_data['return_object']['documents'][i]['title']
+            hilight = remove_html_tags(parsed_data['return_object']['documents'][i]['hilight'])
+            provider = parsed_data['return_object']['documents'][i]['provider']
+            
+            # keyword = create_keyword(parsed_data['return_object']['documents'][0]['title'], hilight)
+            keyword = []
+            # related_industry = related_industries(keyword, hilight)
+            related_industry = []
+            #AI 조례 생성
+            #    created_ordinance = ordinance_from_gpt()
+            res.append([provider, title, hilight, related_industry, link, content, images , byline])
+        # print(res)
         return res
     else:
         print("API 호출 실패", respone.status_code)
@@ -118,12 +124,9 @@ def news_id_search(id): #이 함수는 아이디 가지고 기사 분석 가능
             "fields": [
                 "content",
                 "byline",
-                "category",
-                "category_incident",
                 "images",
-                "provider_subject",
-                "provider_news_id",
-                "publisher_code"] 
+                "provider_link_page"
+            ] 
         }
     }
 
@@ -141,4 +144,51 @@ def related_industries(keyword, hilight):
     return related
 
 # ordinance_from_gpt()
-print(search_news())
+
+def select_cate(sex, age, job):
+    # 남성과 여성의 관심사 리스트
+    interests = {
+        "M": {
+            20: ["자동차", "IT_과학일반", "음악", "영화", "게임"],
+            30: ["무역", "인터넷_SNS", "콘텐츠", "증권_증시", "외환"],
+            40: ["의료_건강", "전시_공연", "미디어", "금융_재테크", "날씨"],
+            50: ["부동산", "교육_시험", "서비스_쇼핑", "미디어", "취업_창업"]
+        },
+        "W": {
+            20: ["여성", "출판", "취업_창업", "영화", "음악"],
+            30: ["생활", "요리_여행", "날씨", "콘텐츠", "인터넷_SNS"],
+            40: ["경제일반", "영화", "생활", "인터넷_SNS", "미디어"],
+            50: ["미디어", "음악", "생활", "여행", "영화"]
+        }
+    }
+
+    age_interests = interests.get(sex, {}).get(age, [])
+    job_interests = {
+        "학생": ["게임", "영화", "음악", "인터넷_SNS", "미디어"],
+        "회사원": ["서비스_쇼핑", "증권_증시", "외환", "IT_과학일반", "인터넷_SNS"],
+        "1차 산업": ["농구", "야구", "축구", "환경", "자원"],
+        "공무원": ["행정_자치", "정치일반", "교육_시험", "외교", "사회일반"],
+        "사업자": ["산업_기업", "자동차", "금융_재테크", "무역", "서비스_쇼핑"]
+    }.get(job, [])
+
+    return age_interests, job_interests
+
+def find_common_interests(sex, age, job):
+    age_list, job_list = select_cate(sex, age, job)
+    all_interests = age_list + job_list if age_list and job_list else age_list or job_list
+    
+    if not all_interests:
+        return []
+
+    interests_count = {}
+    for interest in all_interests:
+        if interest in interests_count:
+            interests_count[interest] += 1
+        else:
+            interests_count[interest] = 1
+
+    sorted_interests = sorted(interests_count.items(), key=lambda x: x[1], reverse=True)
+    top_interests = [item[0] for item in sorted_interests[:5]]
+
+    return top_interests
+

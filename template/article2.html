@@ -268,6 +268,26 @@
     height: auto; /* 이미지 높이 자동 조절 */
 }
 
+.main_info{
+    margin-block-start:0px;
+    margin-block-end:0px;
+}
+.custom-text {
+    color: green;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+.bounce-text {
+    animation: bounce 1s ease infinite;
+}
+
 
 /* .bylaw-box는 bylaw1과 bylaw2 클래스 대신에 사용 */
 
@@ -318,7 +338,17 @@ function getCookie(name) {
         document.addEventListener('DOMContentLoaded', function() {
             var searchBox = document.getElementById('search-box');
             var searchInput = document.getElementById('search-input');
+            if(username){
+                document.getElementById('user_id').innerText = username;    // 추가 추가 추가
+            }else{
+                document.getElementById('user_id').innerText = "익명";
+            }
+            document.getElementById('user_age').innerText = age; 
+            document.getElementById('user_gender').innerText = gender; 
+            document.getElementById('user_job').innerText = job; 
+            document.getElementById('user_region').innerText = country; 
 
+           
             // 검색 아이콘 클릭 이벤트 리스너
             document.getElementById('search-icon').addEventListener('click', function(e) {
                 e.preventDefault();
@@ -373,34 +403,43 @@ function getCookie(name) {
                 }
             });
         });
-
+    
+        var index = 0;
+        
+        
         document.addEventListener('keydown', function(event) {
+            
     const key = event.key;
     if (key === ' ') {
+
+        var img_url = "https://www.flaticon.com/kr/free-icon/photo_10548791";
+       
+        
+       
         fetch('/get_data') // FastAPI 서버의 엔드포인트로 GET 요청 보냄
             .then(response => response.json()) // JSON 형태의 응답을 받음
             .then(data => {
                 const newReel = document.createElement('div');
                 newReel.classList.add('reel');
                 // 여기서 innerHTML 사용
-                newReel.innerHTML = 'New Reel'+ '<div class="inner-reel">' +
+                newReel.innerHTML = '<div class="inner-reel">' +
                         '<div class="news-content">' + 
                             '<div class="news-text">' + 
-                                '<h1>Retrieved News Articles</h1>' +
                                 '<ul>' +
                                     '<li>' +
-                                        '<strong>title:</strong> ' + data['content'][0][0] + '<br>' +
-                                        '<strong>hilight:</strong> ' + data['content'][0][1] + '<br>' +
-                                        '<strong>Provider News ID:</strong> ' + data['content'][0][2] + '<br>' +
-                                    '</li>' +
-                                '</ul>' +
+                                        '<h2>' + data[index][1] +'</h2>'+  '<br>' +
+                                        data[index][0]  + ' ' + data[index][7]+'<br>' +   
+                                        '<strong>간추린 뉴스</strong> ' + data[index][2] + '<br>' +
+                                    '</li>' + '<h3 style="color: red;">' + "#" + "IT  "+ "#" + "컴퓨터  "+ "#" + "인공지능   "+ "#  " + "IOT   "+ "#" + "코딩   "  +'</h3>'+  
+                                    '<a href="' + data[index][4] + '" target="_blank">전체 기사 읽으로 가기</a>' +       
+                                '</ul>' + 
                             '</div>' +
-                            '<div class="news-image-container">' + // 이미지를 위한 div
-                                '<img src="image_url.jpg" alt="News Image" class="news-image">' +
+                            '<div class="news-image-container" style="margin-top: 40px;">' + // 이미지를 위한 div    사진 //datap[index][6]
+                                '<img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?size=626&ext=jpg&ga=GA1.1.95067147.1700321404&semt=ais" alt="News Image" class="news-image">' +
                             '</div>' +
                         '</div>' +
                     '</div>'; 
-
+                    index +=1;
                 const reelsContainer = document.querySelector('.reelsContainer');
                 reelsContainer.appendChild(newReel);
                 
@@ -572,18 +611,18 @@ function getCookie(name) {
                     <div class="inner-reel">
                         <div class="news-content"> <!-- 뉴스 내용과 이미지를 감싸는 컨테이너 추가 -->
                             <div class="news-text"> <!-- 뉴스 텍스트를 위한 div -->
-                                <h1>Retrieved News Articles</h1>
+                                <h1>안녕하세요 <span id="user_id"></span> 님!! <span class="custom-text">맞춤형</span> 뉴스입니다.</h1>
                                 <ul>
-                                    <li>
-                                        <strong>title:</strong> {{ data[0][0] }}<br>
-                                        <strong>hilight:</strong> {{ data[0][1] }}<br>
-                                        <strong>Provider News ID:</strong> {{ data[0][2] }}<br>
-                                    </li>
+                                    <h3 >현재 귀하의 정보입니다! 이를 바탕으로 뉴스를 생성합니다.</h3><br>
+                                    <h3 class="main_info">나이대 : <span id="user_age"></span></h3><br>
+                                    <h3 class="main_info">성별 : <span id="user_gender"></span></h3> <br>
+                                    <h3 class="main_info">직업 : <span id="user_job"></span></h3><br>
+                                    <h3 class="main_info">거주지 : <span id="user_region"></span></h3><br>
+                                  
                                 </ul>
+                                <h2 class="bounce-text">아래로 쓸어서 뉴스 시작!!</h2>
                             </div>
-                            <div class="news-image-container"> <!-- 이미지를 위한 div -->
-                                <img src="image_url.jpg" alt="News Image" class="news-image">
-                            </div>
+                        
                         </div>
                     </div>
                 </div>
