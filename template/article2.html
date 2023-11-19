@@ -148,7 +148,17 @@
             min-width: 25vw;
             background-color: white;
             scroll-snap-align: start;
+
+            /* 추가해봄요 */
+            /* transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            opacity: 0; 
+            transform: translateY(20px); */
         }
+    
+        /* .reel.active {
+           opacity: 1; 
+            transform: translateY(0); 
+        } */
 
         .search-box {
     padding: 14px 16px;
@@ -170,16 +180,52 @@
     
     <script>
         document.addEventListener('keypress', function(event) {
-        const key = event.key;
-        if (key === ' ') {
-            const newReel = document.createElement('div');
-            newReel.classList.add('reel');
-            newReel.textContent = 'New Reel'; // 변경된 부분
+    const key = event.key;
+    if (key === ' ') {
+        fetch('/get_data') // FastAPI 서버의 엔드포인트로 GET 요청 보냄
+            .then(response => response.json()) // JSON 형태의 응답을 받음
+            .then(data => {
+                const newReel = document.createElement('div');
+                newReel.classList.add('reel');
+                newReel.textContent = 'New Reel' + data['content']; // 변경된 부분
 
-            const reelsContainer = document.querySelector('.reelsContainer');
-            reelsContainer.appendChild(newReel);
-        }
-    });
+                const reelsContainer = document.querySelector('.reelsContainer');
+                reelsContainer.appendChild(newReel);
+                // console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+});
+// document.addEventListener('keypress', function(event) {
+//     const key = event.key;
+//     if (key === ' ') {
+//         fetch('/get_data')
+//             .then(response => response.json())
+//             .then(data => {
+//                 const newReel = document.createElement('div');
+//                 newReel.classList.add('reel');
+//                 newReel.textContent = 'New Reel' + data['content'];
+
+//                 const reelsContainer = document.querySelector('.reelsContainer');
+//                 reelsContainer.appendChild(newReel);
+
+//                 // 활성화된 요소에 클래스 추가하여 애니메이션 적용
+//                 setTimeout(() => {
+//                     newReel.classList.add('active');
+//                 }, 100);
+
+//                 // 5초 후에 애니메이션 완료 후 요소 제거 (선택사항)
+//                 setTimeout(() => {
+//                     newReel.remove();
+//                 }, 5000);
+//             })
+//             .catch(error => {
+//                 console.error('Error:', error);
+//             });
+//     }
+// });
 
 function getCookie(name) {
         var nameEQ = name + "=";
