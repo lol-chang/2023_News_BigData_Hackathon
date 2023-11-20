@@ -461,19 +461,21 @@ var comment_index =0;
                                         data[index][0] + ' ' + data[index][7] + '<br>' +   
                                         '<strong>간추린 뉴스</strong> ' + data[index][2] + '<br>' +
                                     '</li>' + 
-                                    '<h3 style="color: red;">' + "#" + "IT  " + "#" + "컴퓨터  " + "#" + "인공지능   " + "#  " + "IOT   " + "#" + "코딩   " + '</h3>' +  
-                                    
+                                    '<h3 style="color: red;">' + data[index][3] + '</h3>' +
+                                    '<a href="' + data[index][4] + '" target="_blank" class="read-more-button">전체 기사 읽으러 가기</a>' +      
                                 '</ul>' + 
                             '</div>' +
                             '<div class="news-image-container" style="margin-top: 40px;">' + 
                                 '<img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?size=626&ext=jpg&ga=GA1.1.95067147.1700321404&semt=ais" alt="News Image" class="news-image">' +
                             '</div>' +
-                        '</div>' +
+                        '</div>' + data[index][8] + 
                     '</div>';
                     index +=1;
                 const reelsContainer = document.querySelector('.reelsContainer');
                 reelsContainer.appendChild(newReel);
                 
+
+
                 // console.log(data);
             })
             .catch(error => {
@@ -727,7 +729,7 @@ var comment_index =0;
 
                 <div class="bylaw-box">
                     <span class="bylaw-title">조례 1</span><br>
-                    text1 : openai에서 가져옴 조례 1            
+                              
                 </div>
                 <div class="buttons">
                     <button class="like-button" onclick="likeFunction1()">

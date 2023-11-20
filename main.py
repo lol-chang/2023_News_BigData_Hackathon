@@ -16,7 +16,7 @@ templates = Jinja2Templates(directory="template")
 # 회원가입 정보 KEY값 =============
 user_age = 20
 user_job ="None"
-user_gender="Undefined";    
+user_gender="Undefined";    2   
 user_country="서울(기본값)"
 # ================================
 
