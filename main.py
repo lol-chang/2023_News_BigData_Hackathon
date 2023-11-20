@@ -8,21 +8,21 @@ import bigkinds
 app = FastAPI()
 templates = Jinja2Templates(directory="template")
 
-data2 = bigkinds.search_news()
+# data2 = bigkinds.search_news()
 # data3 = bigkinds.news_id_search()
 #data4 = bigkinds.search_test()
 #print(data4)
 
 # 회원가입 정보 KEY값 =============
 user_age = 20
-user_job ="???"
-user_gender="";    
-user_country="서울"
+user_job ="None"
+user_gender="Undefined";    
+user_country="서울(기본값)"
 # ================================
 
 @app.get("/")
 async def read_root(request: Request):  
-    return templates.TemplateResponse("article2.html", {"request": request, "data": data2 , "age": user_age,"job": user_job, "gender": user_gender , "country": user_country})
+    return templates.TemplateResponse("article2.html", {"request": request , "age": user_age,"job": user_job, "gender": user_gender , "country": user_country})
     
 
 # @app.get("/data3")
@@ -49,15 +49,20 @@ async def show_login(request: Request):
 async def read_root(request: Request):  
     return templates.TemplateResponse("user_info.html", {"request": request, "age": user_age,"job": user_job, "gender": user_gender , "country": user_country})
 
+
+start = True
+global_data = []
+
 @app.get("/get_data")
 async def get_data():
-    # 여기에서 데이터를 가져오는 로직을 구현하고 데이터를 반환합니다.
-    # 이 부분은 실제 데이터를 가져오는 로직으로 대체되어야 합니다.
-    data = bigkinds.search_news()
-      # 예시 데이터
+    global global_data, start
+    if start:
+        global_data = bigkinds.make_news(tmp)
+        start = False
+    data = global_data
     return data
 
-
+tmp = []
 
 @app.post("/server")
 async def get_data(age: int = Form(...) , gender : str = Form(...) , job : str = Form(...) , region : str = Form(...) ):
@@ -66,6 +71,9 @@ async def get_data(age: int = Form(...) , gender : str = Form(...) , job : str =
     user_job = job
     user_gender = gender
     user_country= region
+    global tmp
+
+    tmp = bigkinds.select_cate(gender, age, job)
     # 예시 응답
     return {"message": "Data received successfully"}
 

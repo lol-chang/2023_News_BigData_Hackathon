@@ -18,6 +18,7 @@
            
         }
         .navbar-logo {
+            text-decoration-line: none;
             font-size: 24px;
             color: white;
             padding: 14px 16px;
@@ -65,6 +66,9 @@
             margin-left: 10px;
             margin-right: 10px;
         }
+   
+    
+
         .box-content1 {
             padding: 20px;
             overflow-y: auto;
@@ -74,6 +78,8 @@
         .box {
             height: 420px;
         }
+
+     
         .box-content2 {
             padding: 20px;
             overflow-y: auto;
@@ -82,7 +88,7 @@
             margin-right: 10px;
         }
         .comment-section {
-            border-top: 1px solid #ccc;
+           
             padding: 20px;
             overflow-y: auto;
             height: calc(80% - 10px);
@@ -130,6 +136,20 @@
             margin: 10px;
             box-sizing: border-box;
         }
+
+        /* =========================================================================*/
+        .box, .tall-box, .footer-box {
+    border: none; /* 기존의 테두리 제거 */
+    
+    /* 기존의 다른 스타일들 */
+}
+
+.box{
+    border-right: 3px solid black; 
+    border-bottom: 3px solid black; /* 하단에만 테두리 적용 */
+}
+
+        
         .reelsContainer {
             /* height: 80vh;
             width: 25vw; */
@@ -147,20 +167,11 @@
             min-height: 50vh;
             min-width: 25vw;
             background-color: white;
-            scroll-snap-align: start;
-            animation: slideDown 0.5s ease;
+            scroll-snap-align: center;
+           
         }
 
-        @keyframes slideDown {
-            from {
-        opacity: 0;
-        transform: translateY(-100%);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+ 
 
         .search-box {
     padding: 14px 16px;
@@ -288,6 +299,21 @@
     animation: bounce 1s ease infinite;
 }
 
+.read-more-button {
+    display: inline-block;
+    padding: 10px 15px;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.read-more-button:hover {
+    background-color: #0056b3;
+}
+
 
 /* .bylaw-box는 bylaw1과 bylaw2 클래스 대신에 사용 */
 
@@ -320,8 +346,12 @@ function getCookie(name) {
     var gender = "{{gender}}"
     var country = "{{country}}"
     /*   =============================================   */
+
+var comment_index =0;
+
     window.onload = function() {
-        updateComments();
+        comment_index = 0;
+        //updateComments();
         if (username) {
             // 사용자 이름을 페이지에 표시하는 로직
             document.getElementById("menu5").textContent = username;
@@ -427,18 +457,19 @@ function getCookie(name) {
                             '<div class="news-text">' + 
                                 '<ul>' +
                                     '<li>' +
-                                        '<h2>' + data[index][1] +'</h2>'+  '<br>' +
-                                        data[index][0]  + ' ' + data[index][7]+'<br>' +   
+                                        '<h2>' + data[index][1] + '</h2><br>' +
+                                        data[index][0] + ' ' + data[index][7] + '<br>' +   
                                         '<strong>간추린 뉴스</strong> ' + data[index][2] + '<br>' +
-                                    '</li>' + '<h3 style="color: red;">' + "#" + "IT  "+ "#" + "컴퓨터  "+ "#" + "인공지능   "+ "#  " + "IOT   "+ "#" + "코딩   "  +'</h3>'+  
-                                    '<a href="' + data[index][4] + '" target="_blank">전체 기사 읽으로 가기</a>' +       
+                                    '</li>' + 
+                                    '<h3 style="color: red;">' + "#" + "IT  " + "#" + "컴퓨터  " + "#" + "인공지능   " + "#  " + "IOT   " + "#" + "코딩   " + '</h3>' +  
+                                    
                                 '</ul>' + 
                             '</div>' +
-                            '<div class="news-image-container" style="margin-top: 40px;">' + // 이미지를 위한 div    사진 //datap[index][6]
+                            '<div class="news-image-container" style="margin-top: 40px;">' + 
                                 '<img src="https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg?size=626&ext=jpg&ga=GA1.1.95067147.1700321404&semt=ais" alt="News Image" class="news-image">' +
                             '</div>' +
                         '</div>' +
-                    '</div>'; 
+                    '</div>';
                     index +=1;
                 const reelsContainer = document.querySelector('.reelsContainer');
                 reelsContainer.appendChild(newReel);
@@ -448,11 +479,17 @@ function getCookie(name) {
             .catch(error => {
                 console.error('Error:', error);
             });
+            
+            updateComments();
+            comment_index+=1;
+            console.log(comment_index)
+            
+             // 추가
     }
 
-    if (key === 'ArrowDown') {
-        updateComments(); // 추가
-    }
+  
+        
+    
 });
 
 
@@ -556,7 +593,26 @@ function getCookie(name) {
         ];
 
         function updateComments() {
-            let selectedIndices = [];
+
+            if(comment_index == 0){
+
+                document.getElementById('randomUser').textContent = "부적절한표현을 사용한 댓글은 삭제 될 수 있습니다.";
+                
+
+         
+      
+                document.getElementById('randomUser1').textContent = "또한 정확하지 정보나 광고는 통보 없이 삭제 될수 있습니다.";
+             
+        
+     
+                document.getElementById('randomUser2').textContent = "청렴하게 지방 정치에 참여해보세요";
+                document.getElementById('randomComment2').style.color = 'red';
+                document.getElementById('randomComment2').textContent = "LET'S DIGITOCRACY!";
+
+
+
+            }else{
+                let selectedIndices = [];
             let randomIndex = Math.floor(Math.random() * people.length);
             let selectedUser =  people[randomIndex];
             selectedIndices.push(randomIndex); 
@@ -578,7 +634,11 @@ function getCookie(name) {
             selectedIndices.push(randomIndex);
             selectedUser =  people[randomIndex];
             document.getElementById('randomUser2').textContent = '@' + selectedUser.username;
+            document.getElementById('randomComment2').style.color = 'black';
             document.getElementById('randomComment2').textContent = selectedUser.comment;
+                
+            }
+        
 
     }
 
@@ -589,8 +649,9 @@ function getCookie(name) {
 
     </script>
     <div class="navbar">
-        <a href="/" class="navbar-logo">logo</a>
+        <a href="/" class="navbar-logo">Digitocracy_조례줄래?</a>
         <div class="navbar-menu">
+            <a href="https://www.nars.go.kr/info/processResearch.do">국회입법조사처(자문)</a>
             <a href="/plaza">지방의회광장</a>
             <a href="https://www.bigkinds.or.kr/#n">BigKinds</a>
             <a href="https://www.juminegov.go.kr/ordn/reqList">주민e직접</a>
@@ -635,19 +696,20 @@ function getCookie(name) {
             <div class="tall-box">
                 <div class="box-content">
                     <!-- Box 1의 기존 컨텐츠 -->
+                    <h2 class="comment-up">댓글</h2>    <!-- 11_20-->   
                 </div>
                 <div class="comment-section">
                     <div class="comment">
-                        <span class="comment-user" id="randomUser">@user</span><br>
-                        <span class="comment-text" id="randomComment">blahblah</span>
+                        <span class="comment-user" id="randomUser">여기에 댓글을 다는 사람의 정보가 표시됩니다! </span><br>
+                        <span class="comment-text" id="randomComment"></span>
                     </div>
                     <div class="comment">
-                        <span class="comment-user" id="randomUser1">@user</span><br>
-                        <span class="comment-text" id="randomComment1">blahblah</span>
+                        <span class="comment-user" id="randomUser1">댓글을 달아서 커뮤니티 직접 참여해보세요!</span><br>
+                        <span class="comment-text" id="randomComment1"></span>
                     </div>
                     <div class="comment">
-                        <span class="comment-user" id="randomUser2">@user</span><br>
-                        <span class="comment-text" id="randomComment2">blahblah</span>
+                        <span class="comment-user" id="randomUser2">해당 기사의 관련 종사자면 상위에 노출될 확률이 높아집니다!</span><br>
+                        <span class="comment-text" id="randomComment2"></span>
                     </div>
                     <form class="comment-form">
                         <textarea placeholder="Write your comment here..."></textarea>
@@ -660,7 +722,7 @@ function getCookie(name) {
     <div class="footer">
         <div class="footer-box">
             <!-- 첫 번째 bylaw 컨테이너 -->
-       
+          
             <div class="bylaw-container">
 
                 <div class="bylaw-box">
@@ -674,7 +736,7 @@ function getCookie(name) {
                     <button class="unlike-button" onclick="unlikeFunction1()">
                         <img  id ="unlikeImage1"src="https://cdn-icons-png.flaticon.com/128/309/309473.png" alt="싫어요" />
                     </button>
-                </div>  
+                </div>
             </div>
             <!-- 두 번째 bylaw 컨테이너 -->
             <div class="bylaw-container">
