@@ -2,7 +2,7 @@ import requests
 import re
 import openai
 
-openai.api_key = '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'
+
 model = 'text-davinci-003'
 
 def gpt(query):
@@ -33,7 +33,7 @@ def search_news(x,y,k,last=False):
                 "from": "2019-01-01",
                 "until": "2023-03-31"
             },
-            "provider": [],
+            "provider": ["강원일보" ,"강원도민일보"],
             "category": x,
             "category_incident": y,
             "byline": "",
@@ -75,6 +75,7 @@ def search_news(x,y,k,last=False):
             tmp = related_industries(hilight)
             related_industry = tmp[0]
             final= tmp[1]
+ 
             res.append([provider, title, hilight, related_industry, link, content, images , byline, final])
 
         return res
@@ -127,7 +128,7 @@ def news_id_search(id): #이 함수는 아이디 가지고 기사 분석 가능
 
 def related_industries(hilight):
     res = []
-    x = str(hilight) + "  Look at this sentence and don't put the relevant industry together, just pick three in one sentence. Please answer in Korean"
+    x = str(hilight) + "  Look at this sentence and explain the related industries or fields in a higher dimension in one sentence. Please answer in Korean"
     y = str(hilight) + "  Look at this sentence and pick two funny bylaw that can overcome this situation in one sentence instead of sticking them together. Please answer in Korean."
     res.append(gpt(x))
     res.append(gpt(y))
@@ -158,7 +159,7 @@ def select_cate(sex, age, job):
         "공무원": ["행정_자치", "정치일반", "교육_시험", "외교", "사회일반"],
         "사업자": ["산업_기업", "자동차", "금융_재테크", "무역", "서비스_쇼핑"]
     }.get(job, [])
-
+    # print(list(set(age_interests + job_interests)))
     return list(set(age_interests + job_interests))
 
 def find_common_interests(sex, age, job):
@@ -184,15 +185,15 @@ news = []
 def make_news(tmp):
     # 사건사고 뉴스 추가 
     global news
-    news = search_news(["부동산"], ["범죄"], 2)
+    news = search_news(["정치"], [], 3)
     
     # 정치 뉴스 추가 
-    for i in search_news(["경제일반"], ["범죄"], 2):
+    for i in search_news(["경제>취업_창업"], [], 2):
         news.append(i)
     
     #관심 뉴스 추가 
     state = True
-    for i in search_news(tmp, ["범죄"], 2, last=state):
+    for i in search_news(tmp, [], 5, last=state):
         news.append(i)
     
     return news
