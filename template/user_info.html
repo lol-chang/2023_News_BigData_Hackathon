@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-group input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .form-group input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+    
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // 폼의 기본 제출 동작을 방지
+    
+                // 각 필드의 값을 가져옴
+                var age = document.getElementById('age').value;
+                var gender = document.getElementById('gender').value;
+                var job = document.getElementById('job').value;
+                var region = document.getElementById('region').value;
+
+                // 쿠키에 저장
+                if(0 <= age && age <= 29)
+                    age = 20;
+                else if(30 <= age && age <= 39)
+                    age = 30;
+                else if(40 <= age && age <= 49)
+                    age = 40;
+                else if(50 <= age && age <= 100)
+                    age = 50;
+            
+
+                document.cookie = "age=" + age;
+                document.cookie = "gender=" + gender;
+                document.cookie = "job=" + job;
+                document.cookie = "region=" + region;
+    
+                // POST 요청을 위한 FormData 객체 생성
+                const formData = new FormData();
+                formData.append('age', age);
+                formData.append('gender', gender);
+                formData.append('job', job);
+                formData.append('region', region);
+    
+                // Fetch API를 사용하여 서버에 POST 요청
+                fetch('/server', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(error => console.error('Error:', error));
+
+                window.location.href = '/';
+            });
+        });
+    </script>
+    
+
+
+
+    <div class="form-container">
+        <form action="/server" method="post">
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" name="age" , value="{{age}}">
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender">
+                    <option value="M" selected>Male</option>
+                    <option value="F">Female</option>
+                    <option value="U">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="job">Job</label>
+                <input type="text" id="job" name="job" value="{{job}}">
+            </div>
+            <div class="form-group">
+                <label for="region">Region</label>
+                <input type="text" id="region" name="region" value="{{country}}">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+    </div>
+
+
+
+</body>
+</html>

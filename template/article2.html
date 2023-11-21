@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>조례 줄래?
+    </title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 7px;
+           
+        }
+        .navbar-logo {
+            text-decoration-line: none;
+            font-size: 24px;
+            color: white;
+            padding: 14px 16px;
+        }
+        .navbar-menu {
+            margin-left: auto;
+            display: flex;
+        }
+        .navbar-menu a {
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            padding-top: 20px;
+            text-decoration: none;
+        }
+        .navbar-menu a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        .search-icon {
+            font-size: 24px;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+        }
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+        }
+        .left-column, .right-column {
+            padding: 10px;
+        }
+        .left-column {
+            flex: 2;
+            
+        }
+        .right-column {
+            flex: 1;
+        }
+        .box, .tall-box, .footer-box {
+          
+            margin-bottom: 10px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+   
+    
+
+        .box-content1 {
+            padding: 20px;
+            overflow-y: auto;
+            height: 400px;
+            margin-bottom: 10px;
+        }
+        .box {
+            height: 600px;
+            border : none;
+        }
+
+     
+        .box-content2 {
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(50% - 10px);
+            margin-bottom: 10px;
+            margin-right: 10px;
+        }
+        .comment-section {
+           
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(80% - 10px);
+        }
+        .comment {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+        .comment:last-child {
+            border-bottom: none;
+        }
+        .comment-user {
+            font-weight: bold;
+            color: #333;
+        }
+        .comment-text {
+            margin-left: 5px;
+        }
+        .comment-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            resize: none;
+            margin-right: 10px;
+            box-sizing: border-box;
+        }
+        .comment-form button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .tall-box {
+            height: 420px;
+        }
+        .footer {
+            width: 100%;
+           
+            margin-right: 10px;
+        }
+        .footer-box {
+            border: 1px solid black;
+            height: 200px;
+            margin: 10px;
+            box-sizing: border-box;
+        }
+
+        /* =========================================================================*/
+        .box, .tall-box, .footer-box {
+    border: none; /* 기존의 테두리 제거 */
+    
+    /* 기존의 다른 스타일들 */
+}
+
+.box{
+    border-right: 3px solid black; 
+
+}
+
+        
+        .reelsContainer {
+            /* height: 80vh;
+            width: 25vw; */
+            /* margin-top: 4em; */
+            display: flex;
+            overflow: auto;
+            gap: 2em;
+            flex-direction: column;
+            scroll-snap-type: y mandatory;
+        }
+        .reelsContainer::-webkit-scrollbar {
+            display: none;
+        }
+        .reel {
+            min-height: 80vh;
+            min-width: 25vw;
+            background-color: white;
+            scroll-snap-align: center;
+           
+        }
+
+ 
+
+        .search-box {
+    padding: 14px 16px;
+    background-color: white;
+    color: black;
+    position: absolute;
+    right: 0;
+    top: 50px;
+}
+
+.search-box input[type="text"] {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+
+
+/* 공통 버튼 스타일 */
+
+
+/* 버튼과 bylaw 박스를 포함할 컨테이너 */
+.bylaw-container {
+    display: flex; /* flexbox 사용 */
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: space-between; /* 좌우 여백을 균등하게 분배 */
+        
+}
+.bylaw-box {
+    
+    flex-grow: 1; /* 가용 공간을 모두 차지하도록 설정 */
+    margin-right: 10px; /* 버튼 컨테이너와의 간격 설정 */
+    padding: 10px; /* 안쪽 여백 설정 */
+    /* border: 1px solid black; 테두리 설정 */
+
+}
+.buttons {
+    align-items: center; /* 세로 중앙 정렬 */
+    display: flex;
+    flex-direction: row; /* 버튼을 세로로 쌓음 */
+   
+    height: 100px; /* 버튼 컨테이너의 높이 설정 */
+}
+.like-button, .unlike-button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    text-align: center;
+    width: 50px; /* 버튼 너비 설정 */
+    height: 30px; /* 버튼 높이 설정 */
+}
+
+/* 좋아요 및 싫어요 버튼 이미지 스타일 */
+.like-button img, .unlike-button img {
+    width: 100%; /* 부모 요소의 크기에 맞게 조정 */
+    height: auto; /* 이미지의 원래 비율을 유지 */
+}
+
+.unlike-button img {
+    /* 기존 스타일 유지 (크기 조정 등) */
+    transform: scaleY(-1);
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.reel-slide {
+    animation: slideInDown 0.5s ease-out forwards;
+}
+
+.bylaw-title {
+    font-family: Arial, sans-serif; /* 폰트 패밀리 설정 */
+    font-size: 16px; /* 폰트 크기 설정 */
+    font-weight: bold; /* 폰트 두께 설정 */
+    /* 필요에 따라 추가 스타일 지정 */
+}
+
+.news-content {
+    display: flex;
+    align-items: start;
+}
+
+.news-text {
+    flex: 7; /* 텍스트 영역이 유연하게 늘어나도록 설정 */
+    padding-right: 10px; /* 이미지와의 간격을 위한 여백 */
+}
+
+.news-image-container {
+    flex: 3; /* 이미지 컨테이너가 전체 공간의 30%를 차지하도록 설정 */
+    flex-shrink: 0; /* 이미지 크기가 축소되지 않도록 설정 */
+    padding-left: 10px; /* 텍스트와의 간격을 위한 여백 */
+
+    flex-shrink: 0; /* 이미지 크기가 축소되지 않도록 설정 */
+}
+
+.news-image-container1 {
+    padding-left: 10px; /* 텍스트와의 간격을 위한 여백 */
+    height : 50px;
+    width : 50px;
+   
+}
+
+.news-image {
+    width: 100%; /* 이미지 너비를 컨테이너에 맞게 조절 */
+    height: auto; /* 이미지 높이 자동 조절 */
+}
+
+.news-image1 {
+    width: 70px; /* 이미지 너비를 컨테이너에 맞게 조절 */
+    height: 70px; /* 이미지 높이 자동 조절 */
+}
+
+.main_info{
+    margin-block-start:0px;
+    margin-block-end:0px;
+}
+.custom-text {
+    color: green;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+.bounce-text {
+    animation: bounce 1s ease infinite;
+}
+
+.read-more-button {
+    display: inline-block;
+    padding: 10px 15px;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.read-more-button:hover {
+    background-color: #0056b3;
+}
+
+.blnk{
+    width: 20px;
+}
+.comment-up{
+    margin-bottom: 0px;
+}
+.gpt {
+    display: flex;
+}
+
+.grad-bar {
+  margin-left: 30px;
+  background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent; /* 이 부분이 중요합니다 */
+  -webkit-text-fill-color: transparent; /* Webkit 브라우저용 */
+  -webkit-animation: gradbar 15s ease infinite;
+  -moz-animation: gradbar 15s ease infinite;
+  animation: gradbar 7s ease infinite;
+}
+
+@keyframes gradbar {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* .bylaw-box는 bylaw1과 bylaw2 클래스 대신에 사용 */
+
+
+    </style>
+</head>
+<body>
+    
+    
+    <script>
+    function deleteCookieAndRedirect(name) {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        window.location.href = '/';
+    }
+
+function getCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    }
+    /*   ================= user 정보 =================    */
+    var username = getCookie("username");
+    var age = "{{ age }}";
+    var job = "{{ job }}";
+    var gender = "{{gender}}"
+    var country = "{{country}}"
+    /*   =============================================   */
+
+var comment_index = 0;
+
+    window.onload = function() {
+        comment_index = 0;
+        //updateComments();
+        if (username) {
+            // 사용자 이름을 페이지에 표시하는 로직
+            document.getElementById("menu5").textContent = username;
+            document.getElementById("menu4").textContent = "Log out";
+            menu5.setAttribute('href', '/user_info');
+        }else{
+            menu5.setAttribute('href', '/login');
+        }
+
+        
+      
+    };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var searchBox = document.getElementById('search-box');
+            var searchInput = document.getElementById('search-input');
+            if(username){
+                document.getElementById('user_id').innerText = username;    // 추가 추가 추가
+            }else{
+                document.getElementById('user_id').innerText = "익명";
+            }
+            document.getElementById('user_age').innerText = age; 
+            document.getElementById('user_gender').innerText = gender; 
+            document.getElementById('user_job').innerText = job; 
+            document.getElementById('user_region').innerText = country; 
+
+           
+            // 검색 아이콘 클릭 이벤트 리스너
+            document.getElementById('search-icon').addEventListener('click', function(e) {
+                e.preventDefault();
+                toggleSearchBox();
+            });
+
+            // 검색 입력창에서 Enter 키 이벤트 리스너
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    var searchValue = searchInput.value.trim();
+                    if (searchValue) {
+                        // 검색값 저장 로직 (예: 콘솔에 출력)
+                        console.log("검색어:", searchValue);
+                        // 검색창 숨기기
+                        toggleSearchBox();
+                        // 입력창 초기화
+                        searchInput.value = '';
+                    }
+                }
+            });
+
+            function toggleSearchBox() {
+                if (searchBox.style.display === 'none') {
+                    searchBox.style.display = 'block';
+                    searchInput.focus();
+                } else {
+                    searchBox.style.display = 'none';
+                }
+            }
+        });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector('.comment-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const commentInput = document.querySelector('.comment-form textarea');
+                const userComment = commentInput.value.trim();
+
+                if(userComment) {
+                    const newComment = document.createElement('div');
+                    newComment.classList.add('comment');
+                    newComment.innerHTML = `
+                        <span class="comment-user">@${username}-${age}-${job}</span><br>
+                        <span class="comment-text">${userComment}</span>
+                    `;
+
+                    const commentSection = document.querySelector('.comment-section');
+                    commentSection.insertBefore(newComment, commentSection.firstChild);
+
+                    commentInput.value = '';
+                }
+            });
+        });
+    
+        var index = 0;
+        
+        
+        document.addEventListener('keydown', function(event) {
+            
+    const key = event.key;
+    if (key === ' ') {
+
+        var img_url = "https://www.flaticon.com/kr/free-icon/photo_10548791";
+       
+        
+       
+        fetch('/get_data') // FastAPI 서버의 엔드포인트로 GET 요청 보냄
+            .then(response => response.json()) // JSON 형태의 응답을 받음
+            .then(data => {
+                const newReel = document.createElement('div');
+                newReel.classList.add('reel');
+                // 여기서 innerHTML 사용
+                newReel.innerHTML = '<div class="inner-reel" style="border-bottom: 1px solid #ccc; padding-bottom: 10px; margin-bottom: 10px;">' +
+                        '<div class="news-content" >' + 
+                            '<div class="news-text">' + 
+                                '<ul>' +
+                                    '<li>' +
+                                        '<h2>' + data[index][1] + '</h2><br>' +
+                                        data[index][0] + ' ' + data[index][7] + '<br>' +   
+                                        '<strong>간추린 뉴스</strong> ' + data[index][2] + '<br>' +
+                                    '</li>' + '<br>' + '<strong>AI가 분석한 결과</strong> '+
+                                    '<h3 style="color: red;">' + data[index][3] + '</h3>' +
+                                    '<a href="' + data[index][4] + '" target="_blank" class="read-more-button">전체 기사 읽으러 가기</a>' + '<br>' + '<h2>AI 조례</h2>'+ '<div class="gpt">' + '<div class="news-image-container1">' + '<img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FIzBc3%2FbtsAAOK5YZB%2Fc54gKVykVGfqhvjyHr9qzK%2Fimg.png" alt="News Image" class="news-image1">' + '</div>' +  '<h3 class="grad-bar">' + data[index][8] + "</h3>" + "</div>" + 
+                                '</ul>' + 
+                            '</div>' +
+                            '<div class="news-image-container" style="margin-top: 40px;">' + 
+                                '<img src="https://search.pstatic.net/sunny/?src=https%3A%2F%2Fis1-ssl.mzstatic.com%2Fimage%2Fthumb%2FPurple123%2Fv4%2F79%2F25%2F61%2F7925611e-cb81-8b67-022a-e5143f6ba315%2FAppIcon-0-0-1x_U007emarketing-0-0-0-10-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png%2F1200x630wa.png&type=sc960_832" alt="News Image" class="news-image">' +
+                            '</div>' +
+                        '</div>' +  
+                    '</div>';
+                    index +=1;
+                const reelsContainer = document.querySelector('.reelsContainer');
+                reelsContainer.appendChild(newReel);
+                
+
+
+                // console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+            
+            updateComments();
+            
+            console.log(comment_index)
+            
+             // 추가
+    }
+    if (key === 'ArrowDown'){
+        updateComments();
+        likeFunction0();
+        comment_index+=1;
+
+    }
+    if (key === 'ArrowUp'){
+        updateComments();
+        likeFunction0();
+
+        comment_index+=1;
+
+    }
+  
+        
+    
+});
+
+function likeFunction0() {
+    // 좋아요 버튼을 눌렀을 때 실행할 로직
+        document.getElementById("voteText").innerHTML = "AI 조례에 대해 투표해주세요!";
+        var likeImg1 = document.getElementById('likeImage1');
+        var unlikeImg1 = document.getElementById('unlikeImage1');
+
+   
+            unlikeImg1.src = 'https://cdn-icons-png.flaticon.com/128/309/309473.png';
+ 
+            likeImg1.src = 'https://cdn-icons-png.flaticon.com/128/309/309473.png';
+        
+        
+
+ 
+
+        // alert('좋아요 버튼이 클릭되었습니다!');
+    }
+
+
+    function likeFunction1() {
+    // 좋아요 버튼을 눌렀을 때 실행할 로직
+        document.getElementById("voteText").innerHTML = "AI 조례가 좋아요!";
+        var likeImg1 = document.getElementById('likeImage1');
+        var unlikeImg1 = document.getElementById('unlikeImage1');
+
+        if (likeImg1.src.includes('309473.png')) {
+        // 현재 이미지가 첫 번째 이미지일 때, 다른 이미지로 변경
+            likeImg1.src = 'https://cdn-icons-png.flaticon.com/128/309/309524.png';  // 새 이미지의 URL로 변경해야 합니다.
+            unlikeImg1.src = 'https://cdn-icons-png.flaticon.com/128/309/309473.png';
+        } else {
+        // 이미지가 이미 변경된 경우, 원래 이미지로 되돌림
+            likeImg1.src = 'https://cdn-icons-png.flaticon.com/128/309/309473.png';
+            document.getElementById("voteText").innerHTML = "AI 조례에 대해 투표해주세요!";
+        }
+
+ 
+
+        // alert('좋아요 버튼이 클릭되었습니다!');
+    }
+
+    function unlikeFunction1() {
+        document.getElementById("voteText").innerHTML = "AI 조례가 별로에요!";
+        var likeImg1 = document.getElementById('likeImage1');
+            var unlikeImg1 = document.getElementById('unlikeImage1');
+
+        if (unlikeImg1.src.includes('309473.png')) {
+// 현재 이미지가 첫 번째 이미지일 때, 다른 이미지로 변경
+            unlikeImg1.src = 'https://cdn-icons-png.flaticon.com/128/309/309524.png';  // 새 이미지의 URL로 변경해야 합니다.
+            likeImg1.src = 'https://cdn-icons-png.flaticon.com/128/309/309473.png';
+        } else {
+// 이미지가 이미 변경된 경우, 원래 이미지로 되돌림
+            unlikeImg1.src = 'https://cdn-icons-png.flaticon.com/128/309/309473.png';
+            document.getElementById("voteText").innerHTML = "AI 조례에 대해 투표해주세요!";
+        }
+    }
+
+
+
+     
+
+
+
+
+        const people = [
+            { username: '이지민-30-회사원', comment: '좋은 조례인 이유가 정말 많습니다. 지방에 대해 잘 이해한 조례입니다' },
+            { username: '김원빈-30-의사', comment: '아니요, 저는 반대합니다. 이 조례가 통과된다면 피해를 입을 것 같아요' },
+            { username: '김승현-20-학생', comment: '글쎄요? 저는 반대합니다. 학생 신분인데 그리 좋아 보이진 않네요' },
+            { username: '김현우-40-어부', comment: '이 조례는 지역 발전에 큰 기여를 할 것입니다' },
+            { username: '신정우-30-소방관', comment: '이 조례는 공공의 이익에 부합하지 않습니다.' },
+            { username: '백종민-20-회계사', comment: '지방 자치단체의 자율성을 존중해야 합니다.' },
+            { username: '이승현-40-경제학자', comment: '지역 경제에 미치는 영향을 신중히 고려해야 합니다.' },
+            { username: '조성빈-30-축구선수', comment: '이 조례는 지역 사회에 긍정적인 변화를 가져올 수 있습니다.' },
+            { username: '강윤구-50-무직', comment: '조례안이 갖는 잠재적인 부정적 측면을 재검토해야 합니다.' },
+            { username: '곽민준-50-농부', comment: '지역 주민들의 의견이 더 반영되어야 합니다.' },
+            { username: '권승빈-20-IT_회사원', comment: '아니 이게 지금 우리 지역이랑 무슨 관련이 있음? 그냥 2번 조례가 훨씬 좋음' },
+            { username: '장영훈-27-엔지니어', comment: '해당 기사 관련 종사자입니다. 과연 지금 지방의회가 내놓는 정책이 효과가 있을까요?' },
+            { username: '정영훈-35-디자이너', comment: '관련 종사자 댓글 읽어보니 진짜 지방과 시민 사이에 거리가 있네' },
+            { username: '임지혜-27-의사', comment: '조례안을 통과시켜 좀더 효율적이게 만들 필요가 있을듯' },
+            { username: '최대현-33-디자이너', comment: '조례안에 대한 충분한 토론과 검토가 필요합니다.' },
+            { username: '박승현-27-프로그래머', comment: '조례안에 대한 충분한 토론과 검토가 필요합니다.' },
+            { username: '정대현-46-간호사', comment: '정말 화가 납니다. 이건 우리의 목소리를 무시하는 겁니다' },
+            { username: '최성민-33-서비스업', comment: '조례안에 대한 충분한 토론과 검토가 필요합니다.' },
+            { username: '윤지혜-24-요리사', comment: '조례안을 지지하는 사람은 공부 좀 더 하고 오시길. 이건 통과될 수 없어요' },
+
+
+            // ... 더 많은 사용자와 댓글을 추가할 수 있습니다.
+        ];
+
+        function updateComments() {
+
+            if(comment_index == 0){
+
+                document.getElementById('randomUser').textContent = "부적절한표현을 사용한 댓글은 삭제 될 수 있습니다.";
+                
+
+         
+      
+                document.getElementById('randomUser1').textContent = "또한 정확하지 정보나 광고는 통보 없이 삭제 될수 있습니다.";
+             
+        
+     
+                document.getElementById('randomUser2').textContent = "청렴하게 지방 정치에 참여해보세요";
+                document.getElementById('randomComment2').style.color = 'red';
+                document.getElementById('randomComment2').textContent = "LET'S DIGITOCRACY!";
+                
+
+
+
+            }else{
+                let selectedIndices = [];
+            let randomIndex = Math.floor(Math.random() * people.length);
+            let selectedUser =  people[randomIndex];
+            selectedIndices.push(randomIndex); 
+
+        // HTML 요소에 랜덤 사용자와 댓글 표시
+            document.getElementById('randomUser').textContent = '@' + selectedUser.username;
+            document.getElementById('randomComment').textContent = selectedUser.comment;
+
+            do {
+            randomIndex = Math.floor(Math.random() * people.length);
+            } while (selectedIndices.includes(randomIndex));
+            selectedIndices.push(randomIndex); 
+            selectedUser =  people[randomIndex];
+            document.getElementById('randomUser1').textContent = '@' + selectedUser.username;
+            document.getElementById('randomComment1').textContent = selectedUser.comment;
+            do {
+            randomIndex = Math.floor(Math.random() * people.length);
+            } while (selectedIndices.includes(randomIndex));
+            selectedIndices.push(randomIndex);
+            selectedUser =  people[randomIndex];
+            document.getElementById('randomUser2').textContent = '@' + selectedUser.username;
+            document.getElementById('randomComment2').style.color = 'black';
+            document.getElementById('randomComment2').textContent = selectedUser.comment;
+                
+            }
+        
+
+    }
+
+
+        
+    
+
+
+    </script>
+    <div class="navbar">
+        <a href="/" class="navbar-logo">Digitocracy_조례줄래?</a>
+        <div class="navbar-menu">
+            <a href="https://www.nars.go.kr/info/processResearch.do">국회입법조사처(자문)</a>
+            <a href="/plaza">지방의회광장</a>
+            <a href="https://www.bigkinds.or.kr/#n">BigKinds</a>
+            <a href="https://www.juminegov.go.kr/ordn/reqList">주민e직접</a>
+            <a href="#about" class="signin" id="menu4" onclick="deleteCookieAndRedirect('username')">Sign In</a>
+            <a href="/login" class="user/login" id="menu5">Log In</a>
+            <a href="#" class="search-icon" id ="search-icon">🔍</a>
+            <div class="search-box" id="search-box" style="display: none;">
+                <input type="text" placeholder="Search..." id = "search-input">
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="left-column">
+            <div class="box box-content1 reelsContainer"> <!-- 뉴스 박스 -->
+                
+                <!-- 뉴스 항목들이 여기에 들어감 -->
+                <div class="reel">
+                    <div class="inner-reel">
+                        <div class="news-content"> <!-- 뉴스 내용과 이미지를 감싸는 컨테이너 추가 -->
+                            <div class="news-text"> <!-- 뉴스 텍스트를 위한 div -->
+                                <h1>안녕하세요 <span id="user_id"></span> 님!! <span class="custom-text">맞춤형</span> 뉴스입니다.</h1>
+                                <ul>
+                                    <h3 >현재 귀하의 정보입니다! 이를 바탕으로 뉴스를 생성합니다.</h3><br>
+                                    <h3 class="main_info">나이대 : <span id="user_age"></span></h3><br>
+                                    <h3 class="main_info">성별 : <span id="user_gender"></span></h3> <br>
+                                    <h3 class="main_info">직업 : <span id="user_job"></span></h3><br>
+                                    <h3 class="main_info">거주지 : <span id="user_region"></span></h3><br>
+                                  
+                                </ul> <br> <br>
+                                <h2 class="bounce-text">아래로 쓸어서 뉴스 시작!!</h2>
+                            </div>
+                        
+                        </div>
+                    </div>
+                </div>
+                
+           
+                
+            </div>
+        </div>
+        <div class="right-column">
+            <div class="tall-box">
+                <div class="box-content">
+                    <!-- Box 1의 기존 컨텐츠 -->
+                    <h2 class="comment-up">댓글</h2>    <!-- 11_20-->   
+                </div>
+                <div class="comment-section">
+                    <div class="comment">
+                        <span class="comment-user" id="randomUser">여기에 댓글을 다는 사람의 정보가 표시됩니다! </span><br>
+                        <span class="comment-text" id="randomComment"></span>
+                    </div>
+                    <div class="comment">
+                        <span class="comment-user" id="randomUser1">댓글을 달아서 커뮤니티 직접 참여해보세요!</span><br>
+                        <span class="comment-text" id="randomComment1"></span>
+                    </div>
+                    <div class="comment">
+                        <span class="comment-user" id="randomUser2">해당 기사의 관련 종사자면 상위에 노출될 확률이 높아집니다!</span><br>
+                        <span class="comment-text" id="randomComment2"></span>
+                    </div>
+                    <form class="comment-form">
+                        <textarea placeholder="Write your comment here..."></textarea>
+                        <button type="submit">Submit Comment</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button class="like-button" onclick="likeFunction1()">
+                    <img id ="likeImage1" src="https://cdn-icons-png.flaticon.com/128/309/309473.png" alt="좋아요" />
+                </button>
+                <div class ="blnk"></div>
+                <button class="unlike-button" onclick="unlikeFunction1()">
+                    <img  id ="unlikeImage1"src="https://cdn-icons-png.flaticon.com/128/309/309473.png" alt="싫어요" />
+                </button>
+            </div>
+            <h2 id="voteText"> AI 조례에 대해 투표해주세요!</h2>
+         
+
+
+        </div>
+    </div>
+    
+</body>
+</html>
