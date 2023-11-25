@@ -2,7 +2,7 @@ import requests
 import re
 import openai
 
-
+openai.api_key = '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'
 model = 'text-davinci-003'
 
 def gpt(query):
@@ -21,7 +21,7 @@ def remove_html_tags(text):
                   
 global_related = []
 first = True
-def search_news(x,y,k,last=False):
+def search_news(news_provider,x,y,k,last=False):
     global global_related, first
     url = "https://tools.kinds.or.kr/search/news"
 
@@ -33,7 +33,7 @@ def search_news(x,y,k,last=False):
                 "from": "2019-01-01",
                 "until": "2023-03-31"
             },
-            "provider": ["강원일보" ,"강원도민일보"],
+            "provider": news_provider,
             "category": x,
             "category_incident": y,
             "byline": "",
@@ -133,8 +133,21 @@ def related_industries(hilight):
     res.append(gpt(x))
     res.append(gpt(y))
     return res
-
-def select_cate(sex, age, job):
+#######
+news_provider = []
+def select_cate(sex, age, job, region):
+    
+    global news_provider
+    news_provider = []
+    if region == "서울":
+        news_provider = ["서울신문", "머니투데이", "SBS", "YTN", "MBC"]
+    elif region == "춘천":
+        news_provider = ["강원도민일보", "강원일보", "MBC"]
+    elif region == "부산":
+        news_provider = ["부산일보", "경상일보", "경남도민일보"]
+    else:
+        news_provider = ["동아일보", "내일신문", "중앙일보"]
+#######
     # 남성과 여성의 관심사 리스트
     interests = {
         "M": {
@@ -181,20 +194,39 @@ def find_common_interests(sex, age, job):
     return top_interests
 
 
+
 news = []
 def make_news(tmp):
-    # 사건사고 뉴스 추가 
+    # 사건사고 뉴스 추가
+    global news_provider
     global news
-    news = search_news(["정치"], [], 3)
+
+    news = search_news(news_provider, ["정치"], [], 3)
+
+    # 정치 뉴스 추가
+    for i in search_news(news_provider, ["경제>취업_창업"], [], 2):
+        news.append(i)
+
+    #관심 뉴스 추가
+    state = True
+    for i in search_news(news_provider, tmp, [], 5, last=state):
+        news.append(i)
+
+    return news
+#news = []
+#def make_news(tmp):
+    # 사건사고 뉴스 추가 
+ #   global news
+  #  news = search_news(["정치"], [], 3)
     
     # 정치 뉴스 추가 
-    for i in search_news(["경제>취업_창업"], [], 2):
-        news.append(i)
+   # for i in search_news(["경제>취업_창업"], [], 2):
+    #    news.append(i)
     
     #관심 뉴스 추가 
-    state = True
-    for i in search_news(tmp, [], 5, last=state):
-        news.append(i)
+   # state = True
+   # for i in search_news(tmp, [], 5, last=state):
+    #    news.append(i)
     
-    return news
+    #return news
 

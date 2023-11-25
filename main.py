@@ -73,7 +73,7 @@ async def get_data(age: int = Form(...) , gender : str = Form(...) , job : str =
     user_country= region
     global tmp
 
-    tmp = bigkinds.select_cate(gender, age, job)
+    tmp = bigkinds.select_cate(gender, age, job, region)
     # 예시 응답
     return {"message": "Data received successfully"}
 
